@@ -1,9 +1,9 @@
 package com.only.github.event;
 
+import com.only.github.common.event.AbstractEvent;
+import com.only.github.common.event.EventDrivenHelper;
 import org.kohsuke.github.GHPersonSet;
 import org.kohsuke.github.GHUser;
-import org.spring.ext.event.AbstractEvent;
-import org.spring.ext.event.EventDrivenHelper;
 
 /**
  * Created by leiteng on 2017/5/24.

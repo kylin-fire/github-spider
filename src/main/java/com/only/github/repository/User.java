@@ -1,6 +1,6 @@
 package com.only.github.repository;
 
-import org.spring.ext.common.helper.JsonHelper;
+import com.only.github.common.helper.JsonHelper;
 
 /**
  * Created by leiteng on 2017/7/3.

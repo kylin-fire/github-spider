@@ -33,16 +33,35 @@
             <artifactId>github-api</artifactId>
             <version>1.89</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.spring.ext</groupId>-->
-            <!--<artifactId>spring-ext-core</artifactId>-->
-            <!--<version>1.1.1</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.spring.ext</groupId>-->
-            <!--<artifactId>spring-ext-common</artifactId>-->
-            <!--<version>1.1.2</version>-->
-        <!--</dependency>-->
+
+        <!-- google -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <!-- apache -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.3</version>
+        </dependency>
 
         <!-- logger -->
         <dependency>

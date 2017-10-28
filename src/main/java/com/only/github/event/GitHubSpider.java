@@ -1,12 +1,12 @@
 package com.only.github.event;
 
+import com.only.github.common.event.EventDrivenHelper;
 import com.only.github.repository.User;
 import com.only.github.repository.UserRepository;
 import org.apache.commons.collections.CollectionUtils;
 import org.kohsuke.github.GHPersonSet;
 import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
-import org.spring.ext.event.EventDrivenHelper;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +27,10 @@ public class GitHubSpider {
 
             List<User> userList = userRepository.listUser();
 
-            GitHub gitHub = GitHub.connect("oleone", "cd1019a52a6ad65e1b5aedd4e9fc983f1175509a");
+            // ff2fc87f04c44a444e60 618c68f8a25b88f7167e8542cfcc382a39732a9a
+             GitHub gitHub = GitHub.connect("oleone", "7cab1d449890072d84abe4771dd14236da135550");
+
+//            GitHub gitHub = GitHub.connectUsingPassword("oleone", "1qaz~WSX");
 
             if (CollectionUtils.isNotEmpty(userList)) {
                 for (User each : userList) {

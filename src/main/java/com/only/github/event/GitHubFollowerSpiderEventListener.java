@@ -1,21 +1,16 @@
 package com.only.github.event;
 
 import com.google.common.eventbus.Subscribe;
+import com.only.github.common.event.AbstractResult;
+import com.only.github.common.event.EventDrivenHelper;
+import com.only.github.common.event.listener.AbstractEventListener;
 import org.kohsuke.github.GHPersonSet;
 import org.kohsuke.github.GHUser;
-import org.spring.ext.event.AbstractResult;
-import org.spring.ext.event.EventDrivenHelper;
-import org.spring.ext.event.listener.AbstractEventListener;
-
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by leiteng on 2017/5/24.
  */
 public class GitHubFollowerSpiderEventListener extends AbstractEventListener<GitHubFollowersSpiderEvent, AbstractResult<Boolean>> {
-    private static ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     @Subscribe
     public void listen(GitHubFollowersSpiderEvent event) {

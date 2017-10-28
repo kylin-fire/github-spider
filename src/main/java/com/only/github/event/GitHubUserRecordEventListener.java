@@ -3,16 +3,16 @@ package com.only.github.event;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.eventbus.Subscribe;
+import com.only.github.common.cache.GuavaCacheClient;
+import com.only.github.common.event.AbstractResult;
+import com.only.github.common.event.listener.AbstractEventListener;
+import com.only.github.common.helper.BeanHelper;
 import com.only.github.repository.User;
 import com.only.github.repository.UserRepository;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spring.ext.client.cache.GuavaCacheClient;
-import org.spring.ext.common.helper.BeanHelper;
-import org.spring.ext.event.AbstractResult;
-import org.spring.ext.event.listener.AbstractEventListener;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -36,6 +36,10 @@ public class GitHubUserRecordEventListener extends AbstractEventListener<GitHubU
     static {
         init();
     }
+
+    private final String[] cities = {"china", "中国", "beijing", "北京", "shanghai", "上海", "guangzhou", "广州", "shenzhen", "深圳", "hangzhou", "杭州", "wuhan", "武汉", "nanjing", "南京", "dalian", "大连", "chengdu", "成都", "changsha", "长沙", "suzhou", "苏州", "tianjin", "天津", "xian", "西安", "chongqing", "重庆", "shenyang", "沈阳", "ningbo", "宁波"};
+    private final String[] emailList = {"163.com", "qq.com", "126.com", "sina.com", "sohu.com", "aliyun.com", ".cn"};
+    private final String[] companyList = {"阿里", "ali", "阿里巴巴", "alibaba", "淘宝", "taobao", "支付宝", "alipay", "天猫", "tmall", "腾讯", "tencent", "百度", "baidu", "美团", "meituan", "大众点评", "dianping", "新美大", "华为", "huawei", "中兴", "今日头条", "蘑菇街", "mogujie", "菜鸟", "京东", "jidong", "阿里云", "aliyun", "挖财", "wacai"};
 
     private static void init() {
         try {
@@ -100,20 +104,29 @@ public class GitHubUserRecordEventListener extends AbstractEventListener<GitHubU
         boolean match = false;
         if (user.getEmail() != null) {
             // 在中国
-            if (isChinese(user.getLocation()) || isChineseEmail(user.getEmail())) {
-                // 忽略tmall、taobao、alibaba
-                if (isAlibabaUser(user.getCompany()) || isAlibabaUser(user.getEmail())) {
-
-                } else if (isJavaDeveloper(user)) {
-                    match = true;
-                }
+            if (isChinese(user.getLocation()) || isChineseEmail(user.getEmail()) || isChineseCompany(user.getCompany())) {
+                //                if (isJavaDeveloper(user)) {
+                match = true;
+                //                }
             }
         }
         return match;
     }
 
+    private boolean isChineseCompany(String company) {
+        if (company != null) {
+            company = company.toLowerCase();
+            for (String each : companyList) {
+                if (company.contains(each)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private boolean isChineseEmail(String email) {
-        String[] emailList = {"163.com", "qq.com", "126.com", "sina.com", "sohu.com", "aliyun.com", ".cn"};
+
         for (String each : emailList) {
             if (email.contains(each)) {
                 return true;
@@ -143,7 +156,7 @@ public class GitHubUserRecordEventListener extends AbstractEventListener<GitHubU
 
         location = location.toLowerCase();
 
-        String[] cities = {"beijing", "shanghai", "guangzhou", "shenzhen", "hangzhou", "wuhan", "nanjing", "dalian", "chengdu", "changsha", "suzhou", "tianjing", "xian", "chongqing"};
+
         for (String city : cities) {
             if (location.contains(city)) {
                 return true;
@@ -153,19 +166,4 @@ public class GitHubUserRecordEventListener extends AbstractEventListener<GitHubU
         return false;
     }
 
-    private boolean isAlibabaUser(String company) {
-        if (company == null) {
-            return false;
-        }
-
-        company = company.toLowerCase();
-        String[] companyList = {"tmall", "taobao", "alibaba", "alipay"};
-        for (String each : companyList) {
-            if (company.contains(each)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

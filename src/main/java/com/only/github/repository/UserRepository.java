@@ -1,10 +1,11 @@
 package com.only.github.repository;
 
 import com.google.common.collect.Lists;
+import com.google.common.io.FileWriteMode;
 import com.google.common.io.Files;
+import com.only.github.common.helper.JsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spring.ext.common.helper.JsonHelper;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -15,13 +16,18 @@ import java.util.List;
  */
 public class UserRepository {
     private static Logger logger = LoggerFactory.getLogger(UserRepository.class);
-    private static File userFile = new File("/home/leiteng/user.txt");
+    private static File userFile;
+
+    static {
+        String path = UserRepository.class.getResource("/").getPath();
+        userFile = new File(path + "user.txt");
+    }
 
     public boolean addUser(User user) {
         try {
             String record = JsonHelper.toJson(user);
 
-            Files.append(record + "\n", userFile, Charset.forName("UTF-8"));
+            Files.asCharSink(userFile, Charset.forName("UTF-8"), FileWriteMode.APPEND).write(record + "\n");
 
             return true;
         } catch (Exception e) {
