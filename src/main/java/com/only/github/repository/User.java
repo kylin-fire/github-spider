@@ -67,4 +67,8 @@ public class User {
     public Integer getStatus() {
         return status;
     }
+
+    public boolean isMatch(){
+        return getStatus() != null && getStatus() == 1;
+    }
 }

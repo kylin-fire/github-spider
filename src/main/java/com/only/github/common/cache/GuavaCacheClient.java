@@ -81,10 +81,10 @@ public class GuavaCacheClient implements CacheClient {
             result = cache.get(key, (Callable<? extends Serializable>) callable);
 
             if (result == null || Context.debug() || logger.isInfoEnabled()) {
-                logger.warn(String.format("get\01k\02%s\01c\02%s\01e\02%s", key, callable, expire));
+                logger.warn(String.format("get@k:%s\01c:%s\01e:%s", key, callable, expire));
             }
         } catch (Exception e) {
-            logger.error(String.format("get\01k\02%s\01c\02%s\01exception\02%s", key, callable, Throwables.getRootCause(e).getMessage()));
+            logger.error(String.format("get@k:%s\01c:%s\01exception:%s", key, callable, Throwables.getRootCause(e).getMessage()));
 
             throw Throwables.propagate(e);
         }
@@ -96,7 +96,7 @@ public class GuavaCacheClient implements CacheClient {
                 // 类型不一致，失效
                 invalid(key);
 
-                logger.error(String.format("get\01k\02%s\01c\02%s\01exception\02%s", key, callable, Throwables.getRootCause(e).getMessage()));
+                logger.error(String.format("get@k:%s\01c:%s\01exception:%s", key, callable, Throwables.getRootCause(e).getMessage()));
             }
         }
         return null;
@@ -108,11 +108,11 @@ public class GuavaCacheClient implements CacheClient {
             try {
                 T result = (T) cache.getIfPresent(key);
                 if (logger.isInfoEnabled()) {
-                    logger.info(String.format("get\01k\02%s\01r\02%s", key, result));
+                    logger.info(String.format("get@k:%s\01r:%s", key, result));
                 }
                 return result;
             } catch (Exception e) {
-                logger.error(String.format("get\01k\02%s", key), e);
+                logger.error(String.format("get@k:%s", key), e);
             }
         }
         return null;
@@ -124,12 +124,12 @@ public class GuavaCacheClient implements CacheClient {
             try {
                 ImmutableMap<K, V> result = (ImmutableMap<K, V>) cache.getAllPresent(keys);
                 if (logger.isInfoEnabled()) {
-                    logger.info(String.format("mget\01k\02%s\01r\02%s", keys, result));
+                    logger.info(String.format("mget@k:%s\01r:%s", keys, result));
                 }
                 // 取缓存成功或部分成功
                 return result;
             } catch (Exception e) {
-                logger.error(String.format("get\01ks\02%s", keys), e);
+                logger.error(String.format("get@ks:%s", keys), e);
             }
         }
         return Collections.EMPTY_MAP;
@@ -144,7 +144,7 @@ public class GuavaCacheClient implements CacheClient {
     public boolean put(Serializable key, Serializable value, int expire, int version) {
         cache.put(key, value);
         if (logger.isInfoEnabled()) {
-            logger.info(String.format("put\01k\02%s\01v\02%s", key, value));
+            logger.info(String.format("put@k:%s\01v:%s", key, value));
         }
         return true;
     }
@@ -153,7 +153,7 @@ public class GuavaCacheClient implements CacheClient {
     public boolean delete(Serializable key) {
         cache.invalidate(key);
         if (logger.isInfoEnabled()) {
-            logger.info(String.format("delete\01k\02%s", key));
+            logger.info(String.format("delete@k:%s", key));
         }
         return true;
     }
@@ -162,7 +162,7 @@ public class GuavaCacheClient implements CacheClient {
     public boolean mdelete(List<? extends Object> keys) {
         cache.invalidateAll(keys);
         if (logger.isInfoEnabled()) {
-            logger.info(String.format("mdelete\01k\02%s", keys));
+            logger.info(String.format("mdelete@k:%s", keys));
         }
         return true;
     }
@@ -171,7 +171,7 @@ public class GuavaCacheClient implements CacheClient {
     public boolean invalid(Serializable key) {
         cache.invalidate(key);
         if (logger.isInfoEnabled()) {
-            logger.info(String.format("delete\01k\02%s", key));
+            logger.info(String.format("invalid@k:%s", key));
         }
         return true;
     }
@@ -180,7 +180,7 @@ public class GuavaCacheClient implements CacheClient {
     public boolean minvalid(List<? extends Object> keys) {
         cache.invalidateAll(keys);
         if (logger.isInfoEnabled()) {
-            logger.info(String.format("mdelete\01k\02%s", keys));
+            logger.info(String.format("minvalid@k:%s", keys));
         }
         return true;
     }

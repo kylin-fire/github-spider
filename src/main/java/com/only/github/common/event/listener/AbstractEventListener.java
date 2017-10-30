@@ -28,7 +28,7 @@ public abstract class AbstractEventListener<E extends AbstractEvent, R extends A
         } finally {
             long end = System.currentTimeMillis();
 
-            logger.warn(String.format("handleEvent\01event\02%s\01ms\02%s", event.getClass().getSimpleName(), (end - start)));
+            logger.warn(String.format("handleEvent@event:%s,ms:%s", event.getClass().getSimpleName(), (end - start)));
         }
     }
 

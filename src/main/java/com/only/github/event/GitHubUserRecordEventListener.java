@@ -105,9 +105,9 @@ public class GitHubUserRecordEventListener extends AbstractEventListener<GitHubU
         if (user.getEmail() != null) {
             // 在中国
             if (isChinese(user.getLocation()) || isChineseEmail(user.getEmail()) || isChineseCompany(user.getCompany())) {
-                //                if (isJavaDeveloper(user)) {
-                match = true;
-                //                }
+                if (isMatchLanguage(user)) {
+                    match = true;
+                }
             }
         }
         return match;
@@ -136,12 +136,14 @@ public class GitHubUserRecordEventListener extends AbstractEventListener<GitHubU
         return false;
     }
 
-    private boolean isJavaDeveloper(GHUser user) throws IOException {
+    private boolean isMatchLanguage(GHUser user) throws IOException {
         Map<String, GHRepository> repositories = user.getRepositories();
         Set<Map.Entry<String, GHRepository>> entries = repositories.entrySet();
         for (Map.Entry<String, GHRepository> entry : entries) {
             String language = entry.getValue().getLanguage();
-            if ("java".equals(language) || "Java".equals(language)) {
+            language = language.toLowerCase();
+
+            if ("java".equals(language) || "php".equals(language) || "go".equals(language) || "objective-c".equals(language) || "javascript".equals(language)) {
                 return true;
             }
         }

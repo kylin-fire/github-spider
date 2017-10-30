@@ -20,6 +20,17 @@ public class GitHubSpider {
     public static void main(String[] args) throws IOException {
         GitHubSpider spider = new GitHubSpider();
         spider.spider();
+        // spider.splitEmail();
+    }
+
+    private void splitEmail() {
+        List<User> userList = userRepository.listUser();
+
+        for (User each : userList) {
+            if (each.isMatch()) {
+                System.out.println(each.getEmail() + ",");
+            }
+        }
     }
 
     private void spider() {
