@@ -36,7 +36,7 @@ public class GitHubSpider {
     private void spider() {
         try {
 
-            List<User> userList = userRepository.listUser();
+            List<User> userList = userRepository.listSeed();
 
             // ff2fc87f04c44a444e60 618c68f8a25b88f7167e8542cfcc382a39732a9a
              GitHub gitHub = GitHub.connect("oleone", "7cab1d449890072d84abe4771dd14236da135550");
@@ -46,6 +46,8 @@ public class GitHubSpider {
             if (CollectionUtils.isNotEmpty(userList)) {
                 for (User each : userList) {
                     GHUser user = gitHub.getUser(each.getLogin());
+
+                    EventDrivenHelper.publishEvent(new GitHubUserRecordEvent(user));
 
                     spiderFollower(user);
                 }

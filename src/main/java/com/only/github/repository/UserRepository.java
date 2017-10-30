@@ -17,17 +17,28 @@ import java.util.List;
 public class UserRepository {
     private static Logger logger = LoggerFactory.getLogger(UserRepository.class);
     private static File userFile;
+    private static File seedFile;
 
     static {
         String path = UserRepository.class.getResource("/").getPath();
         userFile = new File(path + "user.txt");
+
+        seedFile = new File(path + "seed.txt");
     }
 
     public boolean addUser(User user) {
+        return add(user, userFile);
+    }
+
+    public boolean addSeed(User user) {
+        return add(user, seedFile);
+    }
+
+    private boolean add(User user, File seedFile) {
         try {
             String record = JsonHelper.toJson(user);
 
-            Files.asCharSink(userFile, Charset.forName("UTF-8"), FileWriteMode.APPEND).write(record + "\n");
+            Files.asCharSink(seedFile, Charset.forName("UTF-8"), FileWriteMode.APPEND).write(record + "\n");
 
             return true;
         } catch (Exception e) {
@@ -37,6 +48,16 @@ public class UserRepository {
     }
 
     public List<User> listUser() {
+        return list(userFile);
+
+    }
+
+    public List<User> listSeed() {
+        return list(seedFile);
+
+    }
+
+    private List<User> list(File userFile) {
         try {
             List<String> lines = Files.readLines(userFile, Charset.forName("UTF-8"));
 
@@ -52,6 +73,5 @@ public class UserRepository {
             logger.error(String.format("listUser"), e);
             return null;
         }
-
     }
 }

@@ -37,7 +37,7 @@ public class GitHubUserRecordEventListener extends AbstractEventListener<GitHubU
         init();
     }
 
-    private final String[] cities = {"china", "中国", "beijing", "北京", "shanghai", "上海", "guangzhou", "广州", "shenzhen", "深圳", "hangzhou", "杭州", "wuhan", "武汉", "nanjing", "南京", "dalian", "大连", "chengdu", "成都", "changsha", "长沙", "suzhou", "苏州", "tianjin", "天津", "xian", "西安", "chongqing", "重庆", "shenyang", "沈阳", "ningbo", "宁波"};
+    private final String[] cities = {"beijing", "北京", "hangzhou", "杭州"}; //{"china", "中国", "beijing", "北京", "shanghai", "上海", "guangzhou", "广州", "shenzhen", "深圳", "hangzhou", "杭州", "wuhan", "武汉", "nanjing", "南京", "dalian", "大连", "chengdu", "成都", "changsha", "长沙", "suzhou", "苏州", "tianjin", "天津", "xian", "西安", "chongqing", "重庆", "shenyang", "沈阳", "ningbo", "宁波"};
     private final String[] emailList = {"163.com", "qq.com", "126.com", "sina.com", "sohu.com", "aliyun.com", ".cn"};
     private final String[] companyList = {"阿里", "ali", "阿里巴巴", "alibaba", "淘宝", "taobao", "支付宝", "alipay", "天猫", "tmall", "腾讯", "tencent", "百度", "baidu", "美团", "meituan", "大众点评", "dianping", "新美大", "华为", "huawei", "中兴", "今日头条", "蘑菇街", "mogujie", "菜鸟", "京东", "jidong", "阿里云", "aliyun", "挖财", "wacai"};
 
@@ -85,9 +85,10 @@ public class GitHubUserRecordEventListener extends AbstractEventListener<GitHubU
 
                     if (isMatch(user)) {
                         myUser.setStatus(1);
+                        userRepository.addUser(myUser);
                     }
 
-                    userRepository.addUser(myUser);
+                    userRepository.addSeed(myUser);
                 } catch (Exception e) {
                     logger.error(String.format("onHandle@event:%s", event), e);
                 }
@@ -104,7 +105,7 @@ public class GitHubUserRecordEventListener extends AbstractEventListener<GitHubU
         boolean match = false;
         if (user.getEmail() != null) {
             // 在中国
-            if (isChinese(user.getLocation()) || isChineseEmail(user.getEmail()) || isChineseCompany(user.getCompany())) {
+            if (isMatchCity(user.getLocation())) { // || isChineseEmail(user.getEmail()) || isChineseCompany(user.getCompany())) {
                 if (isMatchLanguage(user)) {
                     match = true;
                 }
@@ -151,7 +152,7 @@ public class GitHubUserRecordEventListener extends AbstractEventListener<GitHubU
         return false;
     }
 
-    private boolean isChinese(String location) {
+    private boolean isMatchCity(String location) {
         if (location == null) {
             return false;
         }
